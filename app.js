@@ -11,7 +11,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT } = require('./secret');
 
 const users = require('./routes/users');
-const cards = require('./routes/cards');
+const cards = require('./routes/articles');
 const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 

@@ -15,14 +15,14 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-   date: {
+  date: {
     type: Date,
     default: Date.now,
   },
-  source:{
+  source: {
     type: String,
-     required: true,
-  }
+    required: true,
+  },
   link: { // ссылка на статью
     type: String,
     match: validate,
