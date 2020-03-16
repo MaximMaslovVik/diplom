@@ -11,7 +11,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT } = require('./secret');
 
 const users = require('./routes/users');
-const cards = require('./routes/articles');
+const articles = require('./routes/articles');
 const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 
@@ -54,7 +54,7 @@ app.get('/crash-test', () => {
 
 app.use(auth);
 app.use('/', users);
-app.use('/', cards);
+app.use('/', articles);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
