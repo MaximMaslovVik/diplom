@@ -7,19 +7,6 @@ const User = require('../models/user');
 
 const { JWT_SECRET } = require('../secret.js');
 
-// отправим токен, браузер сохранит его в куках
-
-module.exports.getAllUsers = (req, res, next) => {
-  User.find({})
-    .then((user) => {
-      if (user.length === 0) {
-        return (new NotFoundError('База данных user пуста!'));
-      }
-      return res.send({ data: user });
-    })
-    .catch(next);
-};
-
 module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
