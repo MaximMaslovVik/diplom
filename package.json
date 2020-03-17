@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MaximMaslovVik/diplom.git"
+    "url": "git+https://https://github.com/MaximMaslovVik/diplom-api.git"
   },
   "author": "Maslov Maxim",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MaximMaslovVik/diplomt/issues"
+    "url": "https://github.com/MaximMaslovVik/diplom/issues"
   },
   "homepage": "",
   "devDependencies": {
-    "autoprefixer": "^9.7.1",
+    "autoprefixer": "^9.7.4",
     "cross-env": "^6.0.3",
     "eslint": "^6.8.0",
     "gh-pages": "^2.2.0",

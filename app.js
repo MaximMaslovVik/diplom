@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 
 const app = express();
 
@@ -13,9 +13,9 @@ const { PORT } = require('./secret');
 const users = require('./routes/users');
 const articles = require('./routes/articles');
 const auth = require('./middlewares/auth');
-const { createUser, login } = require('./controllers/users');
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+
+mongoose.connect('mongodb://localhost:27017/news-apidb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -25,26 +25,8 @@ app.use(requestLogger);
 
 app.use(cookieParser());
 
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-    name: Joi.string().required().min(2).max(30),
-    about: Joi.string().required().min(2),
-    avatar: Joi.string().uri().required(),
-  }),
-}), createUser);
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }),
-}), login);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -55,13 +37,6 @@ app.get('/crash-test', () => {
 app.use(auth);
 app.use('/', users);
 app.use('/', articles);
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }),
-}), login);
 
 app.all('/*', (req, res) => res.status(404).send('Запрашиваемый ресурс не найден'));
 
