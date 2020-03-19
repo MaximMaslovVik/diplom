@@ -8,13 +8,11 @@ const User = require('../models/user');
 const { JWT_SECRET } = require('../secret.js');
 
 module.exports.createUser = (req, res, next) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
+  const { name, email, password } = req.body;
   if (password.length > 9) {
     bcrypt.hash(password, 8)
       .then((hash) => User.create({
-        name, about, avatar, email, password: hash,
+        name, email, password: hash,
       }))
       .then((user) => res.send({ data: user.omitPrivate() }))
       .catch(next);
