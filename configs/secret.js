@@ -17,7 +17,7 @@ console.log({
 });
 
 module.exports.JWT_SECRET = process.env.JWT_SECRET || 'secret key';
-
+module.exports.PORT = process.env.PORT || 3000;
 module.exports = {
   DB,
   SERVER_PORT,
