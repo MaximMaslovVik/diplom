@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const NotFoundError = require('../errors/error_not_found');
-const Error401 = require('../errors/error_Auth');
+const ErrorNotFound = require('../errors/index');
+const Error401 = require('../errors/index');
 const User = require('../models/user');
 
 const { JWT_SECRET } = require('../configs/secret');
@@ -23,7 +23,7 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((userId) => {
       if (!userId) {
-        throw new NotFoundError('Такого пользователя нет');
+        throw new ErrorNotFound('Такого пользователя нет');
       } else {
         res.send({ userId });
       }
