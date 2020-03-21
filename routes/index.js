@@ -17,9 +17,5 @@ app.use('/', crashTest);
 
 app.all('/*', (req, res) => res.status(404).send('Запрашиваемый ресурс не найден'));
 
-app.use((err, req, res, next) => {
-  res.status(err.statusCode || 500).send({ message: err.message || 'На сервере произошла ошибка' });
-  next();
-});
 
 module.exports = app;
