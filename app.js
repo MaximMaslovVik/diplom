@@ -10,7 +10,7 @@ const index = require('./routes/index');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { SERVER_PORT } = require('./configs/secret');
+const { PORT } = require('./configs/secret');
 
 app.use(requestLogger);
 
@@ -25,4 +25,4 @@ app.use(errorHandler);
 app.use(errors());
 app.use(errorLogger);
 
-app.listen(SERVER_PORT, () => {});
+app.listen(PORT, () => {});
