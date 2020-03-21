@@ -14,8 +14,8 @@ const SECRET_STRING = NODE_ENV === 'production' && SECRET ? SECRET : DEV_SECRET;
 console.log({
   DB,
   SERVER_PORT,
-  SECRET_STRING,
 });
+
 module.exports.JWT_SECRET = process.env.JWT_SECRET || 'secret key';
 
 module.exports = {
