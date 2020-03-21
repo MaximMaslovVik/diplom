@@ -1,10 +1,8 @@
 const router = require('express').Router();
-const { Joi } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 const { getUser } = require('../controllers/users');
 
-const celebrateCheck = require('../modules/celebrate-check');
-
-router.get('/users/:userId', celebrateCheck({
+router.get('/users/:userId', celebrate({
   params: Joi.object().keys({
     userId: Joi.string().alphanum().length(24),
   }),
