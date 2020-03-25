@@ -1,13 +1,13 @@
-const ErrorReq = require('./error_req');
-const Error403 = require('./error_403');
-const ErrorNotFound = require('./error_not_found');
-const Error409 = require('./error_409');
-const Error500 = require('./error_500');
-const ErrorAuth = require('./error_Auth');
+const ErrorReq = require('./error-req');
+const ErrorForbidden = require('./error-forbidden');
+const ErrorNotFound = require('./error-notFound');
+const Error409 = require('./error-409');
+const Error500 = require('./error-500');
+const ErrorAuth = require('./error-auth');
 
 module.exports = {
   ErrorReq,
-  Error403,
+  ErrorForbidden,
   ErrorNotFound,
   Error409,
   Error500,

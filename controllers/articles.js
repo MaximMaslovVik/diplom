@@ -4,13 +4,13 @@ const Article = require('../models/article');
 const { ObjectId } = mongoose.Types;
 
 const ErrorNotFound = require('../errors/index');
-const Error403 = require('../errors/index');
+const ErrorForbidden = require('../errors/index');
 
 module.exports.getAllArticles = (req, res, next) => {
   Article.find({})
     .then((article) => {
       if (article.length === 0) {
-        throw new ErrorNotFound('База данных карточек пуста!');
+        throw new ErrorNotFound('База данных новостей пуста!');
       }
       return res.send({ data: article });
     })
@@ -41,7 +41,7 @@ module.exports.deleteArticle = (req, res, next) => {
             .then((articleRemove) => res.send({ remove: articleRemove }))
             .catch(next);
         } else {
-          next(new Error403('Это не ваша карта, не может быть удалена'));
+          next(new ErrorForbidden('Это не ваша карта, не может быть удалена'));
         }
       } else {
         next(new ErrorNotFound('Карта не найдена'));
