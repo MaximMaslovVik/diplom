@@ -6,7 +6,7 @@ const { errors } = require('celebrate');
 const errorHandler = require('./middlewares/error-handler');
 
 const app = express();
-const index = require('./routes/index');
+const index = require('./routes/routes');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
