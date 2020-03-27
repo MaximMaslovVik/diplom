@@ -20,9 +20,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', index);
-app.use(errorHandler);
+
 
 app.use(errors());
 app.use(errorLogger);
 
+app.use(errorHandler);
 app.listen(PORT, () => {});
