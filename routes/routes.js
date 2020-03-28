@@ -8,14 +8,15 @@ const signup = require('./signup');
 const users = require('./users');
 const articles = require('./articles');
 const crashTest = require('./crash-error');
-const { NOT_FOUND } = require('../configs/constants');
+const NOT_FOUND = require('../configs/constants');
+const celebrateCheck = require('../modules/celebrate-check');
 
-app.use('/', crashTest);
-app.use('/', signin);
-app.use('/', signup);
+crashTest.get('/', crashTest);
+signin.post('/', signin);
+signup.post('/', celebrateCheck, signup);
 
-app.use('/', auth, users);
-app.use('/', auth, articles);
+app.use('/users', celebrateCheck, auth, users);
+app.use('/articles', celebrateCheck, auth, articles);
 
 
 app.use('*', (req, res, next) => next(ErrorNotFound(NOT_FOUND)));

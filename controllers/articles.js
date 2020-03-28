@@ -5,12 +5,14 @@ const { ObjectId } = mongoose.Types;
 
 const ErrorNotFound = require('../errors/index');
 const ErrorForbidden = require('../errors/index');
+const NOT_FOUND = require('../configs/constants');
+const BAD_REQUEST = require('../configs/constants');
 
 module.exports.getAllArticles = (req, res, next) => {
   Article.find({})
     .then((article) => {
       if (article.length === 0) {
-        throw new ErrorNotFound('База данных новостей пуста!');
+        throw new ErrorNotFound(NOT_FOUND);
       }
       return res.send({ data: article });
     })
@@ -31,7 +33,7 @@ module.exports.createArticle = (req, res, next) => {
 module.exports.deleteArticle = (req, res, next) => {
   const { articleId } = req.params;
   if (!ObjectId.isValid(articleId)) {
-    return (new ErrorNotFound('not found'));
+    return (new ErrorNotFound(NOT_FOUND));
   }
   return Article.findById(req.params.articleId)
     .then((article) => {
@@ -41,10 +43,10 @@ module.exports.deleteArticle = (req, res, next) => {
             .then((articleRemove) => res.send({ remove: articleRemove }))
             .catch(next);
         } else {
-          next(new ErrorForbidden('Это не ваша карта, не может быть удалена'));
+          next(new ErrorForbidden(BAD_REQUEST));
         }
       } else {
-        next(new ErrorNotFound('Карта не найдена'));
+        next(new ErrorNotFound(NOT_FOUND));
       }
     })
     .catch(next);
