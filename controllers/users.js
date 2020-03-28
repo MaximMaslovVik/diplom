@@ -2,10 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const ErrorNotFound = require('../errors/index');
-const Error401 = require('../errors/index');
+const ErrorAuth = require('../errors/index');
 const User = require('../models/user');
 
 const { JWT_SECRET } = require('../configs/secret');
+const BAD_REQUEST = require('../configs/constants');
+const AUTH = require('../configs/constants');
 
 module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
@@ -23,7 +25,7 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((userId) => {
       if (!userId) {
-        throw new ErrorNotFound('Такого пользователя нет');
+        throw new ErrorNotFound(BAD_REQUEST);
       } else {
         res.send({ userId });
       }
@@ -46,9 +48,9 @@ module.exports.login = (req, res, next) => {
         .end();
     })
     .catch((err) => {
-      if (err.message !== 'Неправильные почта или пароль') {
+      if (err.message !== BAD_REQUEST) {
         return next(err);
       }
-      return next(new Error401(err.message));
+      return next(new ErrorAuth(AUTH));
     });
 };
