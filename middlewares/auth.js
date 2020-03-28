@@ -1,25 +1,23 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = require('../configs/secret');
 const ErrorAuth = require('../errors/index');
-const { AUTH } = require('../configs/constants');
+require('dotenv').config();
+const AUTH = require('../configs/constants');
 
-const app = express();
-app.use(cookieParser());
-
+const { NODE_ENV, JWT_SECRET } = process.env;
 module.exports = (req, res, next) => {
   const cookie = req.cookies.jwt;
   if (!cookie) {
-    return next(new ErrorAuth(AUTH));
+    throw new ErrorAuth(AUTH);
   }
   let payload;
+
   try {
-    payload = jwt.verify(cookie, JWT_SECRET);
+    payload = jwt.verify(cookie, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
     req.user = payload;
   } catch (err) {
-    return next(new ErrorAuth(AUTH));
+    throw new ErrorAuth(AUTH);
   }
-  return next();
+
+  next();
 };
