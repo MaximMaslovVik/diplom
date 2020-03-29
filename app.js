@@ -10,8 +10,6 @@ const index = require('./routes/routes');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT } = require('./configs/secret');
-
 app.use(requestLogger);
 
 app.use(cookieParser());
@@ -26,4 +24,3 @@ app.use(errors());
 app.use(errorLogger);
 
 app.use(errorHandler);
-app.listen(PORT, () => {});

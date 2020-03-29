@@ -4,13 +4,12 @@
   "description": "diplom",
   "main": "app.js",
   "scripts": {
-    "test": "jest",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://https://github.com/MaximMaslovVik/diplom-api.git"
+    "url": "git+https://github.com/MaximMaslovVik/diplom-api.git"
   },
   "author": "Maslov Maxim",
   "license": "ISC",
