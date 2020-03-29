@@ -1,10 +1,17 @@
 require('dotenv').config();
 
+const mongoose = require('mongoose');
+
 const {
   NODE_ENV, DB_HOST, SECRET,
 } = process.env;
 const DEV_SECRET = 'secret key';
-const DEV_DB_HOST = 'mongodb://localhost:27017/news-apidb';
+const DEV_DB_HOST = mongoose.connect('mongodb://localhost:27017/news-apidb', {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+});
 const DB = NODE_ENV === 'production' && DB_HOST ? DB_HOST : DEV_DB_HOST;
 const SECRET_STRING = NODE_ENV === 'production' && SECRET ? SECRET : DEV_SECRET;
 const PORT = process.env.PORT || 3000;
