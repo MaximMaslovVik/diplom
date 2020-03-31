@@ -1,4 +1,4 @@
-const express = require('express').Router;
+const express = require('express');
 
 const app = express();
 const auth = require('../middlewares/auth');
@@ -11,14 +11,13 @@ const crashTest = require('./crash-error');
 const NOT_FOUND = require('../configs/constants');
 const celebrateCheck = require('../modules/celebrate-check');
 
-crashTest.get('/', crashTest);
-signin.post('/', signin);
-signup.post('/', celebrateCheck, signup);
+app.use('/', signin);
+app.use('/', signup);
 
-app.use('/users', celebrateCheck, auth, users);
-app.use('/articles', celebrateCheck, auth, articles);
+app.use('/', celebrateCheck, auth, users);
+app.use('/', auth, articles);
 
-
+app.use('/', crashTest);
 app.use('*', (req, res, next) => next(ErrorNotFound(NOT_FOUND)));
 
 module.exports = app;
