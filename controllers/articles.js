@@ -1,8 +1,6 @@
 const Article = require('../models/article');
 
-const NotFoundError = require('../errors/index');
-const SERVER_ERROR = require('../configs/constants');
-const NOT_FOUND = require('../configs/secret');
+const NotFoundError = require('../errors/error_not_found');
 
 module.exports.getAllArticles = (req, res) => {
   Article.find({})
@@ -36,11 +34,11 @@ module.exports.deleteArticle = (req, res, next) => {
             .then((removeArticle) => res.send({ remove: removeArticle }))
             .catch(next);
         } else {
-          next(new NotFoundError('NOT_FOUND'));
+          next(new NotFoundError('Это не ваша карта'));
         }
       } else {
-        next(new NotFoundError(NOT_FOUND));
+        next(new NotFoundError('Карта не найдена'));
       }
     })
-    .catch(() => res.status(500).send({ SERVER_ERROR }));
+    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };

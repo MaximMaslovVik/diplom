@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 router.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Что то пошло не так, загрузка сервера  прервана');
+    throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
 

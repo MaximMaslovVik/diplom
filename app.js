@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 
-const urls = require('./routes/routes');
+const urls = require('./routes/index');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
