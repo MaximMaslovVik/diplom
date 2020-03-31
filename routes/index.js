@@ -7,14 +7,15 @@ const signin = require('./signin');
 const signup = require('./signup');
 const users = require('./users');
 const articles = require('./articles');
-const crashTest = require('./crash-error');
+const errorApp = require('./app');
+const crashTest = require('./crash-text');
 
 app.use('/', signin);
 app.use('/', signup);
 app.use('/', auth, users);
 app.use('/', auth, articles);
+app.use('/', errorApp);
 app.use('/', crashTest);
 
-app.all('/*', (req, res) => res.status(404).send('Запрашиваемый ресурс не найден'));
 
 module.exports = app;
