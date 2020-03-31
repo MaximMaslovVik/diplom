@@ -6,7 +6,7 @@ const {
   NODE_ENV, DB_HOST, SECRET,
 } = process.env;
 const DEV_SECRET = 'secret key';
-const DEV_DB_HOST = mongoose.connect('mongodb://localhost:27017/news-apidb', {
+const DEV_DB_HOST = mongoose.connect('mongodb://localhost:27017/news-api', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
