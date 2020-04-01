@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 
-const urls = require('./routes/index');
+const urls = require('./routes/routes');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -12,7 +12,8 @@ const app = express();
 
 require('dotenv').config();
 
-const { 
+const {
+  PORT = 3000,
   MONGODB = 'mongodb://localhost:27017/news_api',
 } = process.env;
 
@@ -42,3 +43,4 @@ app.use((err, req, res, next) => {
 });
 
 
+app.listen(PORT, () => {});
