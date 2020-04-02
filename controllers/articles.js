@@ -1,6 +1,6 @@
 const Article = require('../models/article');
 
-const NotFoundError = require('../errors/error_not_found');
+const NotFoundError = require('../errors/index');
 
 module.exports.getAllArticles = (req, res) => {
   Article.find({})

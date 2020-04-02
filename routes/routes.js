@@ -1,23 +1,19 @@
-const express = require('express');
+const router = require('express').Router();
 
-const app = express();
 const auth = require('../middlewares/auth');
-const { ErrorNotFound } = require('../errors/index');
+
 const signin = require('./signin');
 const signup = require('./signup');
 const users = require('./users');
 const articles = require('./articles');
+const errorApp = require('./app');
 const crashTest = require('./crash-error');
-const NOT_FOUND = require('../configs/constants');
-const celebrateCheck = require('../modules/celebrate-check');
 
-app.use('/', signin);
-app.use('/', signup);
+router.use('/', signin);
+router.use('/', signup);
+router.use('/users', auth, users);
+router.use('/articles', auth, articles);
+router.use('/', errorApp);
+router.use('/', crashTest);
 
-app.use('/', celebrateCheck, auth, users);
-app.use('/', auth, articles);
-
-app.use('/', crashTest);
-app.use('*', (req, res, next) => next(ErrorNotFound(NOT_FOUND)));
-
-module.exports = app;
+module.exports = router;

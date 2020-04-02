@@ -1,16 +1,15 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const NotFoundError = require('../errors/error_not_found');
-const Error500 = require('../errors/error_500');
-
+const NotFoundError = require('../errors/index');
+const Error500 = require('../errors/error-server');
 
 const User = require('../models/user');
 
 module.exports.createUser = (req, res) => {
   const { name, email, password } = req.body;
-  if (password.length > 11) {
-    bcrypt.hash(password, 10)
+  if (password.length > 8) {
+    bcrypt.hash(password, 8)
       .then((hash) => User.create({
         name, email, password: hash,
       }))

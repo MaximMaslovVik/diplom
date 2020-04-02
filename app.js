@@ -2,19 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+
 const mongoose = require('mongoose');
+const urls = require('./routes/routes');
 
-const urls = require('./routes/index');
-
+const { PORT } = require('./configs/secret');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-
-require('dotenv').config();
-
 const {
-  PORT = 3000,
-  MONGODB = 'mongodb://localhost:27017/news_api',
+  MONGODB = 'mongodb://localhost:27017/news-api',
 } = process.env;
 
 mongoose.connect(MONGODB, {
@@ -23,6 +20,8 @@ mongoose.connect(MONGODB, {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
+
+app.use(bodyParser.json());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,6 +40,5 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({ message: err.message });
   next();
 });
-
 
 app.listen(PORT, () => {});
