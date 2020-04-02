@@ -4,8 +4,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 
-const urls = require('./routes/routes');
-const limiter = require('./routes/rateLimit');
+const urls = require('./routes/index');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -24,7 +23,6 @@ mongoose.connect(MONGODB, {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
-app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,5 +41,6 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({ message: err.message });
   next();
 });
+
 
 app.listen(PORT, () => {});
