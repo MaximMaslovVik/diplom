@@ -1,34 +1,36 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const NotFoundError = require('../errors/error_not_found');
-const Error500 = require('../errors/error_500');
-
+const { NotFoundError, ErrorAuth } = require('../errors/index');
+const Error500 = require('../errors/error-server');
+const {
+  AUTH, INVALID_REQUEST, BAD_REQUEST, ITEM_NOT_FOUND,
+} = require('../configs/constants');
 
 const User = require('../models/user');
 
 module.exports.createUser = (req, res) => {
   const { name, email, password } = req.body;
-  if (password.length > 11) {
-    bcrypt.hash(password, 10)
+  if (password.length > 8) {
+    bcrypt.hash(password, 8)
       .then((hash) => User.create({
         name, email, password: hash,
       }))
       .then(() => res.send({ data: { name, email } }))
-      .catch(() => res.status(500).send({ message: 'Не удалось создать пользователя' }));
-  } else { throw new Error500('Слишком короткий пароль!'); }
+      .catch(() => res.status(500).send(INVALID_REQUEST));
+  } else { throw new Error500(BAD_REQUEST); }
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((userId) => {
       if (!userId) {
-        throw new NotFoundError('Такого пользователя нет');
+        throw new NotFoundError(ITEM_NOT_FOUND);
       } else {
         res.send({ userId });
       }
     })
-    .catch(() => res.status(500).send({ message: 'Нет пользователя с таким id' }));
+    .catch(next);
 };
 
 module.exports.login = (req, res) => {
@@ -44,7 +46,5 @@ module.exports.login = (req, res) => {
         .send(token)
         .end();
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(ErrorAuth(AUTH));
 };
