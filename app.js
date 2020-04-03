@@ -5,8 +5,9 @@ const { errors } = require('celebrate');
 
 const mongoose = require('mongoose');
 const urls = require('./routes/routes');
+const errorHandler = require('./middlewares/error-handler');
 
-const { PORT } = require('./configs/secret');
+const { SERVER_PORT } = require('./configs/secret');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
@@ -40,5 +41,5 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({ message: err.message });
   next();
 });
-
-app.listen(PORT, () => {});
+app.use(errorHandler);
+app.listen(SERVER_PORT, () => {});

@@ -1,19 +1,20 @@
 const Article = require('../models/article');
 
 const NotFoundError = require('../errors/index');
+const { INVALID_REQUEST, EMPTY_DATABASE, NOT_FOUND } = require('../configs/constants');
 
-module.exports.getAllArticles = (req, res) => {
+module.exports.getAllArticles = (req, res, next) => {
   Article.find({})
     .then((article) => {
       if (article.length === 0) {
-        throw new NotFoundError('База данных карточек пуста!');
+        throw new NotFoundError(EMPTY_DATABASE);
       }
       return res.send({ data: article });
     })
-    .catch((error) => res.status(500).send({ message: error.message }));
+    .catch(next);
 };
 
-module.exports.createArticle = (req, res) => {
+module.exports.createArticle = (req, res, next) => {
   const owner = req.user._id;
   const {
     keyword, title, text, date, source, link, image,
@@ -22,7 +23,7 @@ module.exports.createArticle = (req, res) => {
     keyword, title, text, date, source, link, image, owner,
   })
     .then((article) => res.send({ data: article }))
-    .catch(() => res.status(500).send({ message: 'Не удается создать карточку' }));
+    .catch(() => next(INVALID_REQUEST));
 };
 
 module.exports.deleteArticle = (req, res, next) => {
@@ -34,11 +35,11 @@ module.exports.deleteArticle = (req, res, next) => {
             .then((removeArticle) => res.send({ remove: removeArticle }))
             .catch(next);
         } else {
-          next(new NotFoundError('Это не ваша карта'));
+          next(new NotFoundError(EMPTY_DATABASE));
         }
       } else {
-        next(new NotFoundError('Карта не найдена'));
+        next(new NotFoundError(NOT_FOUND));
       }
     })
-    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
+    .catch(next);
 };

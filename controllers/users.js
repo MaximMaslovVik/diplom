@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const NotFoundError = require('../errors/index');
+const { NotFoundError, ErrorAuth } = require('../errors/index');
 const Error500 = require('../errors/error-server');
+const AUTH = require('../configs/constants');
 
 const User = require('../models/user');
 
@@ -18,7 +19,7 @@ module.exports.createUser = (req, res) => {
   } else { throw new Error500('Слишком короткий пароль!'); }
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((userId) => {
       if (!userId) {
@@ -27,7 +28,7 @@ module.exports.getUser = (req, res) => {
         res.send({ userId });
       }
     })
-    .catch(() => res.status(500).send({ message: 'Нет пользователя с таким id' }));
+    .catch(next);
 };
 
 module.exports.login = (req, res) => {
@@ -43,7 +44,5 @@ module.exports.login = (req, res) => {
         .send(token)
         .end();
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(ErrorAuth(AUTH));
 };
