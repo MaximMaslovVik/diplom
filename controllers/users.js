@@ -9,7 +9,7 @@ const {
 
 const User = require('../models/user');
 
-module.exports.createUser = (req, res) => {
+const createUser = (req, res) => {
   const { name, email, password } = req.body;
   if (password.length > 8) {
     bcrypt.hash(password, 8)
@@ -20,8 +20,7 @@ module.exports.createUser = (req, res) => {
       .catch(() => res.status(500).send(INVALID_REQUEST));
   } else { throw new Error500(BAD_REQUEST); }
 };
-
-module.exports.getUser = (req, res, next) => {
+const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((userId) => {
       if (!userId) {
@@ -33,7 +32,7 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.login = (req, res) => {
+const login = (req, res) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -46,5 +45,7 @@ module.exports.login = (req, res) => {
         .send(token)
         .end();
     })
-    .catch(ErrorAuth(AUTH));
+    .catch(new ErrorAuth(AUTH));
 };
+
+module.exports = { createUser, getUser, login };

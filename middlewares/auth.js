@@ -12,7 +12,7 @@ app.use(cookieParser());
 module.exports = (req, res, next) => {
   const cookie = req.cookies.jwt;
   if (!cookie) {
-    return next(ErrorAuth(AUTH));
+    return next(new ErrorAuth(AUTH));
   }
   let payload;
 
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(cookie, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
     req.user = payload;
   } catch (err) {
-    return next(ErrorAuth(AUTH));
+    return next(new ErrorAuth(AUTH));
   }
   return next();
 };

@@ -23,7 +23,7 @@ module.exports.createArticle = (req, res, next) => {
     keyword, title, text, date, source, link, image, owner,
   })
     .then((article) => res.send({ data: article }))
-    .catch(() => next(INVALID_REQUEST));
+    .catch(next(INVALID_REQUEST));
 };
 
 module.exports.deleteArticle = (req, res, next) => {
