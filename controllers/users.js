@@ -1,11 +1,13 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { NotFoundError, ErrorAuth } = require('../errors/index');
+const NotFoundError = require('../errors/index');
+const ErrorAuth = require('../errors/error-auth');
 const Error500 = require('../errors/error-server');
-const {
-  AUTH, INVALID_REQUEST, BAD_REQUEST, ITEM_NOT_FOUND,
-} = require('../configs/constants');
+const AUTH = require('../configs/constants');
+const INVALID_REQUESTH = require('../configs/constants');
+const BAD_REQUEST = require('../configs/constants');
+const ITEM_NOT_FOUND = require('../configs/constants');
 
 const User = require('../models/user');
 
@@ -17,7 +19,7 @@ const createUser = (req, res) => {
         name, email, password: hash,
       }))
       .then(() => res.send({ data: { name, email } }))
-      .catch(() => res.status(500).send(INVALID_REQUEST));
+      .catch(() => res.status(500).send(INVALID_REQUESTH));
   } else { throw new Error500(BAD_REQUEST); }
 };
 const getUser = (req, res, next) => {

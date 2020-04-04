@@ -1,7 +1,10 @@
 const Article = require('../models/article');
 
-const NotFoundError = require('../errors/index');
-const { INVALID_REQUEST, EMPTY_DATABASE, NOT_FOUND } = require('../configs/constants');
+const NotFoundError = require('../errors/error-notFound');
+
+const INVALID_REQUEST = require('../configs/constants');
+const EMPTY_DATABASE = require('../configs/constants');
+const NOT_FOUND = require('../configs/constants');
 
 module.exports.getAllArticles = (req, res, next) => {
   Article.find({})
