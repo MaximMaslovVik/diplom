@@ -1,23 +1,19 @@
 const Article = require('../models/article');
 
-const NotFoundError = require('../errors/error-notFound');
+const NotFoundError = require('../errors/error_not_found');
 
-const INVALID_REQUEST = require('../configs/constants');
-const EMPTY_DATABASE = require('../configs/constants');
-const NOT_FOUND = require('../configs/constants');
-
-module.exports.getAllArticles = (req, res, next) => {
+module.exports.getAllArticles = (req, res) => {
   Article.find({})
     .then((article) => {
       if (article.length === 0) {
-        throw new NotFoundError(EMPTY_DATABASE);
+        throw new NotFoundError('База данных карточек пуста!');
       }
       return res.send({ data: article });
     })
-    .catch(next);
+    .catch((error) => res.status(500).send({ message: error.message }));
 };
 
-module.exports.createArticle = (req, res, next) => {
+module.exports.createArticle = (req, res) => {
   const owner = req.user._id;
   const {
     keyword, title, text, date, source, link, image,
@@ -26,7 +22,7 @@ module.exports.createArticle = (req, res, next) => {
     keyword, title, text, date, source, link, image, owner,
   })
     .then((article) => res.send({ data: article }))
-    .catch(next(INVALID_REQUEST));
+    .catch(() => res.status(500).send({ message: 'Не удается создать карточку' }));
 };
 
 module.exports.deleteArticle = (req, res, next) => {
@@ -38,11 +34,11 @@ module.exports.deleteArticle = (req, res, next) => {
             .then((removeArticle) => res.send({ remove: removeArticle }))
             .catch(next);
         } else {
-          next(new NotFoundError(EMPTY_DATABASE));
+          next(new NotFoundError('Это не ваша карта'));
         }
       } else {
-        next(new NotFoundError(NOT_FOUND));
+        next(new NotFoundError('Карта не найдена'));
       }
     })
-    .catch(next);
+    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
