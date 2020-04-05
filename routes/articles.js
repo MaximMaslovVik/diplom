@@ -1,10 +1,10 @@
-const router = require('express').Router();
+const routerArticles = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getAllArticles, createArticle, deleteArticle } = require('../controllers/articles');
+const { getArticles, createArticle, deleteArticle } = require('../controllers/articles');
 
-router.get('/articles', getAllArticles);
+routerArticles.get('/articles', getArticles);
 
-router.post('/articles', celebrate({
+routerArticles.post('/articles', celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required().min(2),
     title: Joi.string().required(),
@@ -16,11 +16,11 @@ router.post('/articles', celebrate({
   }),
 }), createArticle);
 
-router.delete('/articles/:articleId', celebrate({
+routerArticles.delete('/articles/:articleId', celebrate({
   params: Joi.object().keys({
     articleId: Joi.string().alphanum().length(24),
   }),
 }), deleteArticle);
 
 
-module.exports = router;
+module.exports = routerArticles;

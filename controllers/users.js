@@ -1,32 +1,29 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-const NotFoundError = require('../errors/index');
-const ErrorAuth = require('../errors/error-auth');
-const Error500 = require('../errors/error-server');
-const AUTH = require('../configs/constants');
-const INVALID_REQUESTH = require('../configs/constants');
-const BAD_REQUEST = require('../configs/constants');
-const ITEM_NOT_FOUND = require('../configs/constants');
-
+const { NotFoundError, ErrorAuth } = require('../errors/index');
 const User = require('../models/user');
+const { ERROR_EMAIL_PASS, INVALID_REQUEST } = require('../configs/constants');
+const { JWT_SECRET } = require('../configs/secret');
 
-const createUser = (req, res) => {
-  const { name, email, password } = req.body;
-  if (password.length > 8) {
-    bcrypt.hash(password, 8)
+module.exports.createUser = (req, res, next) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  if (password.length > 11) {
+    bcrypt.hash(password, 10)
       .then((hash) => User.create({
-        name, email, password: hash,
+        name, about, avatar, email, password: hash,
       }))
-      .then(() => res.send({ data: { name, email } }))
-      .catch(() => res.status(500).send(INVALID_REQUESTH));
-  } else { throw new Error500(BAD_REQUEST); }
+      .then((user) => res.send({ data: user.omitPrivate() }))
+      .catch(next);
+  }
 };
-const getUser = (req, res, next) => {
-  User.findById(req.user._id)
+
+module.exports.getUser = (req, res, next) => {
+  User.findById(req.params.userId)
     .then((userId) => {
       if (!userId) {
-        throw new NotFoundError(ITEM_NOT_FOUND);
+        throw new NotFoundError(INVALID_REQUEST);
       } else {
         res.send({ userId });
       }
@@ -34,20 +31,24 @@ const getUser = (req, res, next) => {
     .catch(next);
 };
 
-const login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.status(200).cookie('jwt', token, {
-        maxAge: 3600000,
-        httpOnly: true,
-        sameSite: true,
-      })
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+      res
+        .cookie('jwt', token, {
+          maxAge: 604800000,
+          httpOnly: true,
+          sameSite: true,
+        })
         .send(token)
         .end();
     })
-    .catch(new ErrorAuth(AUTH));
+    .catch((err) => {
+      if (err.message !== ERROR_EMAIL_PASS) {
+        return next(err);
+      }
+      return next(new ErrorAuth(err.message));
+    });
 };
-
-module.exports = { createUser, getUser, login };

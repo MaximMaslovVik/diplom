@@ -1,18 +1,20 @@
 const router = require('express').Router();
-const crashTest = require('./crash-error');
-const auth = require('../middlewares/auth');
+const routerCrash = require('./crash-error');
 
-const signin = require('./signin');
-const signup = require('./signup');
-const users = require('./users');
-const articles = require('./articles');
+const routerSignin = require('./signin');
+const routerSignup = require('./signup');
+
+const auth = require('../middlewares/auth');
+const routerUsers = require('./users');
+const routerArticles = require('./articles');
 const errorApp = require('./app');
 
-router.use('/', crashTest);
-router.use('/', signin);
-router.use('/', signup);
-router.use('/users', auth, users);
-router.use('/articles', auth, articles);
+router.use('/', routerCrash);
+
+router.use('/signin', routerSignin);
+router.use('/signup', routerSignup);
+router.use('/users', auth, routerUsers);
+router.use('/articles', auth, routerArticles);
 router.use('/', errorApp);
 
 module.exports = router;
