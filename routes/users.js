@@ -1,11 +1,11 @@
-const router = require('express').Router();
+const routerUsers = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getUser } = require('../controllers/users');
+const { getUsers } = require('../controllers/users');
 
-router.get('/users/me', celebrate({
+routerUsers.get('/', celebrate({
   params: Joi.object().keys({
     userId: Joi.string().alphanum().length(24),
   }),
-}), getUser);
+}), getUsers);
 
-module.exports = router;
+module.exports = routerUsers;

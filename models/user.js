@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const isEmail = require('validator/lib/isEmail');
 const bcrypt = require('bcryptjs');
-const ERROR_EMAIL_PASS = require('../configs/constants');
-const INVALID_LINK = require('../configs/constants');
+const { ERROR_EMAIL_PASS } = require('../configs/constants');
+
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: (valid) => isEmail(valid),
-      message: INVALID_LINK,
+      message: (ERROR_EMAIL_PASS),
     },
   },
   password: {
@@ -43,4 +43,5 @@ userSchema.statics.findUserByCredentials = function check(email, password) {
         });
     });
 };
+
 module.exports = mongoose.model('user', userSchema);

@@ -1,9 +1,10 @@
-const router = require('express').Router();
+const routerCrash = require('express').Router();
+const SERVER_ERROR = require('../configs/constants');
 
-router.get('/crash-test', () => {
+routerCrash.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Что то пошло не так, загрузка сервера  прервана');
+    throw new Error(SERVER_ERROR);
   }, 0);
 });
 
-module.exports = router;
+module.exports = routerCrash;
