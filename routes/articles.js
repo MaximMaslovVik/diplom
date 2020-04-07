@@ -1,10 +1,11 @@
 const routerArticles = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const { getArticles, createArticle, deleteArticle } = require('../controllers/articles');
+const celebrateCheck = require('../modules/celebrate-check');
 
-routerArticles.get('/articles', getArticles);
+routerArticles.get('/', getArticles);
 
-routerArticles.post('/articles', celebrate({
+routerArticles.post('/', celebrateCheck, celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required().min(2),
     title: Joi.string().required(),
@@ -16,7 +17,7 @@ routerArticles.post('/articles', celebrate({
   }),
 }), createArticle);
 
-routerArticles.delete('/articles/:articleId', celebrate({
+routerArticles.delete('/:articleId', celebrate({
   params: Joi.object().keys({
     articleId: Joi.string().alphanum().length(24),
   }),

@@ -1,5 +1,5 @@
 const Article = require('../models/article');
-const { NotFoundError, ForbiddenError } = require('../errors/error-notFound');
+const { NotFoundError, ForbiddenError } = require('../errors/index');
 
 const {
   EMPTY_DATABASE, NOT_YOUR_ARTICLE, ARTICLE_NOT_FOUND,

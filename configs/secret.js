@@ -30,4 +30,5 @@ module.exports = {
   SECRET_STRING,
   SERVER_PORT,
   DEV_DB_HOST,
+  DEV_SECRET,
 };

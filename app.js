@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 
 const urls = require('./routes/routes');
+
 const errorHandler = require('./middlewares/error-handler');
 
 const { SERVER_PORT } = require('./configs/secret');
@@ -14,8 +15,11 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./routes/rateLimit');
 
 app.use(helmet());
+
 app.use(limiter);
+
 app.use(requestLogger);
+
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,4 +33,5 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use(errorHandler);
+
 app.listen(SERVER_PORT, () => {});

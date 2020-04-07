@@ -57,7 +57,7 @@
     "jshint": "^2.11.0-rc1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.4.1",
-    "mongoose": "^5.8.9",
+    "mongoose": "^5.9.7",
     "mongoose-validator": "^2.1.0",
     "multer": "^1.4.2",
     "node": "^13.3.0",

@@ -4,6 +4,7 @@ const errorHandler = (err, req, res, next) => {
   console.log('the error comes from error handler');
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({ message: statusCode === 500 ? SERVER_ERROR : message });
+  console.log(err);
   next();
 };
 module.exports = errorHandler;
