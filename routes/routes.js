@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { ErrorAuth } = require('../errors/index');
+const { ErrorNotFound } = require('../errors/index');
 const { AUTH } = require('../configs/constants');
 
 const routerSignin = require('./signin');
@@ -14,6 +14,6 @@ router.use('/signup', routerSignup);
 router.use('/users/me', auth, routerUsers);
 router.use('/articles', auth, routerArticles);
 
-router.use('*', (req, res, next) => next(new ErrorAuth(AUTH)));
+router.use('*', (req, res, next) => next(new ErrorNotFound(AUTH)));
 
 module.exports = router;
