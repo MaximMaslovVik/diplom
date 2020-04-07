@@ -5,7 +5,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-
+const { ErrorNotFound } = require('./errors/index');
+const { NOT_FOUND } = require('./configs/constants');
 const urls = require('./routes/routes');
 
 const errorHandler = require('./middlewares/error-handler');
@@ -31,7 +32,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/', urls);
-
+app.use(() => {
+  throw new ErrorNotFound(NOT_FOUND);
+});
 app.use(errorLogger);
 
 app.use(errors());
