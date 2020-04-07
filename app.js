@@ -14,11 +14,15 @@ const { SERVER_PORT } = require('./configs/secret');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./routes/rateLimit');
 
+// Модуль helmet поставляет автоматически заголовки безопасности
 app.use(helmet());
 
+// Подключаем rate-limiter
 app.use(limiter);
 
+// Подключаем логгер запросов
 app.use(requestLogger);
+
 
 app.use(bodyParser.json());
 

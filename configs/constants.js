@@ -12,4 +12,5 @@ module.exports = {
   ARTICLE_NOT_FOUND: 'Статья не найдена',
   UNABLE_TO_CREATE_ARTICLE: 'Не удается создать статью',
   FAILED_CREATE_USER: 'Не удалось создать пользователя',
+  SUCCESSFUL_AUTH: 'Успешная авторизация!',
 };
