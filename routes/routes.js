@@ -5,14 +5,14 @@ const { AUTH } = require('../configs/constants');
 
 const routerSignin = require('./signin');
 const routerSignup = require('./signup');
-const auth = require('../middlewares/auth');
+const getAUTH = require('../middlewares/auth');
 const routerUsers = require('./users');
 const routerArticles = require('./articles');
 
 router.use('/signin', routerSignin);
 router.use('/signup', routerSignup);
-router.use('/users/me', auth, routerUsers);
-router.use('/articles', auth, routerArticles);
+router.use('/users/me', getAUTH, routerUsers);
+router.use('/articles', getAUTH, routerArticles);
 
 router.use('*', (req, res, next) => next(new ErrorNotFound(AUTH)));
 

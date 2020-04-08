@@ -3,7 +3,7 @@ const { ErrorAuth } = require('../errors/index');
 const { AUTH } = require('../configs/constants');
 const { NODE_ENV, JWT_SECRET } = require('../configs/secret');
 
-module.exports = (req, res, next) => {
+const getAUTH = (req, res, next) => {
   const cookie = req.cookies.jwt;
   if (!cookie) {
     throw new ErrorAuth(AUTH);
@@ -19,3 +19,4 @@ module.exports = (req, res, next) => {
 
   next();
 };
+module.exports = { getAUTH };
