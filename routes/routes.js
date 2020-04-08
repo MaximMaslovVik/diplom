@@ -5,7 +5,7 @@ const { AUTH } = require('../configs/constants');
 
 const routerSignin = require('./signin');
 const routerSignup = require('./signup');
-const getAUTH = require('../middlewares/auth');
+const { getAUTH } = require('../middlewares/auth');
 const routerUsers = require('./users');
 const routerArticles = require('./articles');
 
