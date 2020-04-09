@@ -9,10 +9,10 @@ module.exports.getArticles = (req, res, next) => {
   Article.find({})
     .select('+owner')
     .then((articles) => {
-      if (articles.length !== 0) {
-        const data = articles.filter((item) => String(item.owner) === req.user._id);
-        res.send({ articles: data });
-      } else throw new NotFoundError(EMPTY_DATABASE);
+      if (articles.length === 0) {
+        throw new NotFoundError(EMPTY_DATABASE);
+      }
+      return res.send({ data: articless });
     })
     .catch(next);
 };
