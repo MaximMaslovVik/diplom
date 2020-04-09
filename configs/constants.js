@@ -13,4 +13,5 @@ module.exports = {
   UNABLE_TO_CREATE_ARTICLE: 'Не удается создать статью',
   FAILED_CREATE_USER: 'Не удалось создать пользователя',
   SUCCESSFUL_AUTH: 'Успешная авторизация!',
+  RATE_LIMIT: 'Слишком много запросов с одного IP!',
 };
