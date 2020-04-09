@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { ErrorAuth } = require('../errors/index');
 const { AUTH } = require('../configs/constants');
-const { DB } = require('../configs/secret');
+const { DB, SECRET_STRING } = require('../configs/secret');
 
 const getAUTH = (req, res, next) => {
   const cookie = req.cookies.jwt;
@@ -11,7 +11,7 @@ const getAUTH = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(cookie, DB);
+    payload = jwt.verify(cookie, DB, SECRET_STRING);
     req.user = payload;
   } catch (err) {
     throw new ErrorAuth(AUTH);

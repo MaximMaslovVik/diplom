@@ -3,7 +3,6 @@ const isEmail = require('validator/lib/isEmail');
 const bcrypt = require('bcryptjs');
 const { ERROR_EMAIL_PASS } = require('../configs/constants');
 
-
 const userSchema = new mongoose.Schema({
   email: {
     type: String,

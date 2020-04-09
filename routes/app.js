@@ -1,10 +1,7 @@
-const error = require('express').Router();
-const NOT_FOUND = require('../configs/constants');
+const errorRouter = require('express').Router();
+const { ErrorNotFound } = require('../errors/index');
+const { NOT_FOUND } = require('../configs/constants');
 
-error.all('/*', (req, res) => {
-  res.statusCode = 404;
-  res.statusMessage = 'Error';
-  res.send(NOT_FOUND);
-});
+errorRouter.all(new ErrorNotFound(NOT_FOUND));
 
-module.exports = error;
+module.exports = errorRouter;
