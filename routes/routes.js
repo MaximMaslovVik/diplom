@@ -1,8 +1,7 @@
-const router = require('express').Router();
-/*
-const { ErrorNotFound } = require('../errors/index');
-const { AUTH } = require('../configs/constants');
-*/
+const express = require('express');
+
+const app = express();
+
 const routerSignin = require('./signin');
 const routerSignup = require('./signup');
 const { getAUTH } = require('../middlewares/auth');
@@ -10,11 +9,11 @@ const routerUsers = require('./users');
 const routerArticles = require('./articles');
 const errorRouter = require('./app');
 
-router.use('/signin', routerSignin);
-router.use('/signup', routerSignup);
-router.use('/users/me', getAUTH, routerUsers);
-router.use('/articles', getAUTH, routerArticles);
+app.use('/signin', routerSignin);
+app.use('/signup', routerSignup);
+app.use('/users/me', getAUTH, routerUsers);
+app.use('/articles', getAUTH, routerArticles);
 
-router.use('*', errorRouter);
+app.use('*', errorRouter);
 
-module.exports = router;
+module.exports = app;
