@@ -7,7 +7,7 @@ const { SECRET_STRING } = require('../configs/secret');
 
 module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
-  if (password.length > 11) {
+  if (password.length > 9) {
     bcrypt.hash(password, 10)
       .then((hash) => User.create({
         name, email, password: hash,

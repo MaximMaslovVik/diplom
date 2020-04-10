@@ -12,7 +12,7 @@ module.exports.getArticles = (req, res, next) => {
       if (articles.length === 0) {
         throw new NotFoundError(EMPTY_DATABASE);
       }
-      return res.send({ data: articless });
+      return res.send({ data: articles });
     })
     .catch(next);
 };
