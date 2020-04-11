@@ -14,4 +14,5 @@ module.exports = {
   FAILED_CREATE_USER: 'Не удалось создать пользователя',
   SUCCESSFUL_AUTH: 'Успешная авторизация!',
   RATE_LIMIT: 'Слишком много запросов с одного IP!',
+  USEWR_ALREADY: 'Такой пользователь с таким email уже есть.',
 };
