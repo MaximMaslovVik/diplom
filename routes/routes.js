@@ -14,6 +14,6 @@ app.use('/signup', routerSignup);
 app.use('/users/me', getAUTH, routerUsers);
 app.use('/articles', getAUTH, routerArticles);
 
-app.use('*', errorRouter);
+app.use('/*', errorRouter);
 
 module.exports = app;

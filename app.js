@@ -1,6 +1,8 @@
 const express = require('express');
 const helmet = require('helmet');
 
+const mongoose = require('mongoose');
+
 const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -10,10 +12,16 @@ const urls = require('./routes/routes');
 
 const errorHandler = require('./middlewares/error-handler');
 
-const { SERVER_PORT } = require('./configs/secret');
+const { SERVER_PORT, DEV_DB_HOST } = require('./configs/secret');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./routes/rateLimit');
 
+mongoose.connect(DEV_DB_HOST, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+});
 // Модуль helmet поставляет автоматически заголовки безопасности
 app.use(helmet());
 
