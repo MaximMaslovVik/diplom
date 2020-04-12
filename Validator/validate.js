@@ -37,7 +37,11 @@ const postSingup = celebrate({
     name: Joi.string().required().min(2).max(30),
   }),
 });
-
+const getUsersValidator = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().alphanum().length(24),
+  }),
+});
 module.exports = {
   createArticleValidator,
   deleteArticleValidator,
@@ -45,4 +49,5 @@ module.exports = {
   isEmail,
   postSingin,
   postSingup,
+  getUsersValidator,
 };
