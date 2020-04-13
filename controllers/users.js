@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { NotFoundError, ErrorAuth, ErrorRequest } = require('../errors/index');
+const { ErrorNotFound, ErrorAuth, ErrorRequest } = require('../errors/index');
 const User = require('../models/user');
 const {
   INVALID_REQUEST, AUTH, USEWR_ALREADY, INVALID_LINK,
@@ -26,7 +26,7 @@ module.exports.getUsers = (req, res, next) => {
   User.findById(req.user._id)
     .then((userId) => {
       if (!userId) {
-        throw new NotFoundError(INVALID_REQUEST);
+        throw new ErrorNotFound(INVALID_REQUEST);
       } else {
         res.send({ userId });
       }
