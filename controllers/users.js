@@ -1,32 +1,30 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { NotFoundError, ErrorAuth, ErrorRequest } = require('../errors/index');
-const User = require('../models/user');
+
+const { ErrorNotFound, ErrorAuth } = require('../errors/index');
 const {
-  INVALID_REQUEST, AUTH, USEWR_ALREADY, INVALID_LINK,
+  ITEM_NOT_FOUND, FAILED_CREATE_USER, INVALID_LINK, AUTH,
 } = require('../configs/constants');
-/*
 const { SECRET_STRING } = require('../configs/secret');
-*/
-module.exports.createUser = (req, res) => {
+const User = require('../models/user');
+
+module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
-  if (password.length > 11) {
-    bcrypt.hash(password, 10)
+  if (password.length > 9) {
+    bcrypt.hash(password, 8)
       .then((hash) => User.create({
         name, email, password: hash,
       }))
       .then(() => res.send({ data: { name, email } }))
-      .catch(new ErrorRequest(USEWR_ALREADY));
-  } else {
-    throw new ErrorAuth(INVALID_LINK);
-  }
+      .catch(next(FAILED_CREATE_USER));
+  } else { throw next(INVALID_LINK); }
 };
 
-module.exports.getUsers = (req, res, next) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((userId) => {
       if (!userId) {
-        throw new NotFoundError(INVALID_REQUEST);
+        throw new ErrorNotFound(ITEM_NOT_FOUND);
       } else {
         res.send({ userId });
       }
@@ -38,7 +36,10 @@ module.exports.login = (req, res) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, SECRET_STRING, { expiresIn: '7d' });
+      /*
+        process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret',
+        */
       res.status(200).cookie('jwt', token, {
         maxAge: 604800000,
         httpOnly: true,

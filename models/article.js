@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const validateLink = require('../Validator/validate');
+const validateLink = require('../configs/validate');
 
 const articleShema = new mongoose.Schema({
   keyword: {
@@ -35,7 +35,7 @@ const articleShema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    select: false,
+    ref: 'user',
     required: true,
   },
 });

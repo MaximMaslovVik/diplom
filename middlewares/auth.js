@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { ErrorAuth } = require('../errors/index');
 const { AUTH } = require('../configs/constants');
-const { DB, SECRET_STRING } = require('../configs/secret');
+const { SECRET_STRING } = require('../configs/secret');
 
-const getAUTH = (req, res, next) => {
+module.exports = (req, res, next) => {
   const cookie = req.cookies.jwt;
   if (!cookie) {
     throw new ErrorAuth(AUTH);
@@ -11,7 +11,7 @@ const getAUTH = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(cookie, DB, SECRET_STRING);
+    payload = jwt.verify(cookie, SECRET_STRING);
     req.user = payload;
   } catch (err) {
     throw new ErrorAuth(AUTH);
@@ -19,4 +19,3 @@ const getAUTH = (req, res, next) => {
 
   next();
 };
-module.exports = { getAUTH };

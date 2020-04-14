@@ -1,23 +1,22 @@
 const Article = require('../models/article');
-const { NotFoundError, ForbiddenError } = require('../errors/index');
 
+const { ErrorNotFound, ErrorForbidden } = require('../errors/index');
 const {
-  EMPTY_DATABASE, NOT_YOUR_ARTICLE, ARTICLE_NOT_FOUND,
+  ARTICLE_NOT_FOUND, UNABLE_TO_CREATE_ARTICL, EMPTY_DATABASE, NOT_YOUR_ARTICLE,
 } = require('../configs/constants');
 
-module.exports.getArticles = (req, res, next) => {
+module.exports.getAllArticles = (req, res, next) => {
   Article.find({})
-    .select('+owner')
-    .then((articles) => {
-      if (articles.length === 0) {
-        throw new NotFoundError(EMPTY_DATABASE);
+    .then((article) => {
+      if (article.length === 0) {
+        throw new ErrorNotFound(EMPTY_DATABASE);
       }
-      return res.send({ data: articles });
+      return res.send({ data: article });
     })
     .catch(next);
 };
 
-module.exports.createArticle = (req, res, next) => {
+module.exports.createArticle = (req, res) => {
   const owner = req.user._id;
   const {
     keyword, title, text, date, source, link, image,
@@ -26,7 +25,7 @@ module.exports.createArticle = (req, res, next) => {
     keyword, title, text, date, source, link, image, owner,
   })
     .then((article) => res.send({ data: article }))
-    .catch(next);
+    .catch(new ErrorNotFound(UNABLE_TO_CREATE_ARTICL));
 };
 
 module.exports.deleteArticle = (req, res, next) => {
@@ -38,10 +37,10 @@ module.exports.deleteArticle = (req, res, next) => {
             .then((removeArticle) => res.send({ remove: removeArticle }))
             .catch(next);
         } else {
-          next(new NotFoundError(ARTICLE_NOT_FOUND));
+          next(new ErrorForbidden(NOT_YOUR_ARTICLE));
         }
       } else {
-        next(new ForbiddenError(NOT_YOUR_ARTICLE));
+        next(new ErrorForbidden(ARTICLE_NOT_FOUND));
       }
     })
     .catch(next);
