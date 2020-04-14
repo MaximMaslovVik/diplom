@@ -1,7 +1,7 @@
-const routerUsers = require('express').Router();
-const { getUsersValidator } = require('../Validator/validate');
-const { getUsers } = require('../controllers/users');
+const router = require('express').Router();
+const { validateUsersGet } = require('../configs/validate');
+const { getUser } = require('../controllers/users');
 
-routerUsers.get('/', getUsersValidator, getUsers);
+router.get('/', validateUsersGet, getUser);
 
-module.exports = routerUsers;
+module.exports = router;

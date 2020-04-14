@@ -1,13 +1,13 @@
-const routerArticles = require('express').Router();
+const router = require('express').Router();
+const { validateArticlesPost, validateArticlesDel } = require('../configs/validate');
+const { getAllArticles, createArticle, deleteArticle } = require('../controllers/articles');
 
-const { getArticles, createArticle, deleteArticle } = require('../controllers/articles');
 const celebrateCheck = require('../modules/celebrate-check');
-const { createArticleValidator, deleteArticleValidator } = require('../Validator/validate');
 
-routerArticles.get('/', getArticles);
+router.get('/articles', getAllArticles);
 
-routerArticles.post('/', celebrateCheck, createArticleValidator, createArticle);
+router.post('/articles', celebrateCheck, validateArticlesPost, createArticle);
 
-routerArticles.delete('/', deleteArticleValidator, deleteArticle);
+router.delete('/articles/:articleId', validateArticlesDel, deleteArticle);
 
-module.exports = routerArticles;
+module.exports = router;

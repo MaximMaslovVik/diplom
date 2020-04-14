@@ -7,12 +7,15 @@ const signin = require('./signin');
 const signup = require('./signup');
 const users = require('./users');
 const articles = require('./articles');
-const errorApp = require('./app');
+const errorApp = require('./errorall');
 
-app.use('/', signin);
-app.use('/', signup);
-app.use('/', auth, users);
+const crashTest = require('./crash-text');
+
+app.use('/signin', signin);
+app.use('/signup', signup);
+app.use('/susers/me', auth, users);
 app.use('/', auth, articles);
-app.use('/', errorApp);
+app.use('/*', errorApp);
+app.use('/', crashTest);
 
 module.exports = app;

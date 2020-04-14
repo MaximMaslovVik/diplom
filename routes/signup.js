@@ -1,7 +1,7 @@
-const routerSignup = require('express').Router();
+const router = require('express').Router();
+const { validateSingnup } = require('../configs/validate');
 const { createUser } = require('../controllers/users');
-const { postSingup } = require('../Validator/validate');
 
-routerSignup.post('/', postSingup, createUser);
+router.post('/', validateSingnup, createUser);
 
-module.exports = routerSignup;
+module.exports = router;

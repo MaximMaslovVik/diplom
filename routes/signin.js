@@ -1,7 +1,7 @@
-const routerSignin = require('express').Router();
+const router = require('express').Router();
+const { validateSingnin } = require('../configs/validate');
 const { login } = require('../controllers/users');
-const { postSingin } = require('../Validator/validate');
 
-routerSignin.post('/', postSingin, login);
+router.post('/', validateSingnin, login);
 
-module.exports = routerSignin;
+module.exports = router;
