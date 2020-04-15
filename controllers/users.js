@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { ErrorNotFound, ErrorAuth } = require('../errors/index');
+const { ErrorNotFound, ErrorAuth, ErrorConfict, ErrorReq } = require('../errors/index');
 const {
   ITEM_NOT_FOUND, FAILED_CREATE_USER, INVALID_LINK, AUTH,
 } = require('../configs/constants');
@@ -16,8 +16,8 @@ module.exports.createUser = (req, res, next) => {
         name, email, password: hash,
       }))
       .then(() => res.send({ data: { name, email } }))
-      .catch(next(FAILED_CREATE_USER));
-  } else { throw next(INVALID_LINK); }
+      .catch(() => next(new ErrorConfict(FAILED_CREATE_USER)));
+  } else { next(new ErrorReq(INVALID_LINK)); }
 };
 
 module.exports.getUser = (req, res, next) => {
