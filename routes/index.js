@@ -13,7 +13,7 @@ const crashTest = require('./crash-text');
 
 app.use('/signin', signin);
 app.use('/signup', signup);
-app.use('/susers/me', auth, users);
+app.use('/users/me', auth, users);
 app.use('/', auth, articles);
 app.use('/*', errorApp);
 app.use('/', crashTest);
