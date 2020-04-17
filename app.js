@@ -14,7 +14,7 @@ const app = express();
 const limiter = require('./modules/rateLimit');
 const errorHandler = require('./middlewares/error-handler');
 
-const { SERVER_PORT, DEV_DB_HOST } = require('./configs/secret');
+const { PORT, DEV_DB_HOST } = require('./configs/secret');
 
 mongoose.connect(DEV_DB_HOST, {
   useNewUrlParser: true,
@@ -45,4 +45,4 @@ app.use(errorLogger);
 
 app.use(errorHandler);
 
-app.listen(SERVER_PORT, () => {});
+app.listen(PORT, () => {});

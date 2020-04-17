@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
-const validateLink = require('../configs/validate');
+const { validateLink } = require('../configs/validate');
 
-const articleShema = new mongoose.Schema({
+const { ErrorForbidden, ErrorNotFound } = require('../errors/index');
+const { ARTICLE_NOT_FOUND, UNABLE_TO_CREATE_ARTICLE, INVALID_LINK } = require('../configs/constants');
+
+const articleSchema = new mongoose.Schema({
   keyword: {
     type: String,
     required: true,
@@ -10,13 +13,15 @@ const articleShema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    minlength: 2,
   },
   text: {
     type: String,
     required: true,
+    minlength: 2,
   },
   date: {
-    type: String,
+    type: Date,
     required: true,
   },
   source: {
@@ -25,19 +30,39 @@ const articleShema = new mongoose.Schema({
   },
   link: {
     type: String,
-    match: validateLink,
     required: true,
+    validate: [validateLink, INVALID_LINK],
   },
   image: {
     type: String,
-    match: validateLink,
     required: true,
+    validate: [validateLink, INVALID_LINK],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
+    select: false,
   },
 });
 
-module.exports = mongoose.model('article', articleShema);
+articleSchema.statics.removeIfIsOwner = function (owner, articleId) {
+  return this.findById(articleId)
+    .select('+owner')
+    .then((article) => {
+      if (!article) {
+        return Promise.reject(new ErrorNotFound(ARTICLE_NOT_FOUND));
+      }
+
+      if (article.owner._id.toString() === owner) {
+        return article.remove();
+      }
+
+      return Promise.reject(new ErrorForbidden(UNABLE_TO_CREATE_ARTICLE));
+    });
+};
+
+module.exports = mongoose.model('article', articleSchema);
+
+/*
+*/
