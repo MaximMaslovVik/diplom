@@ -46,23 +46,5 @@ const articleSchema = new mongoose.Schema({
   },
 });
 
-articleSchema.statics.removeIfIsOwner = function (owner, articleId) {
-  return this.findById(articleId)
-    .select('+owner')
-    .then((article) => {
-      if (!article) {
-        return Promise.reject(new ErrorNotFound(ARTICLE_NOT_FOUND));
-      }
-
-      if (article.owner._id.toString() === owner) {
-        return article.remove();
-      }
-
-      return Promise.reject(new ErrorForbidden(UNABLE_TO_CREATE_ARTICLE));
-    });
-};
-
 module.exports = mongoose.model('article', articleSchema);
 
-/*
-*/
