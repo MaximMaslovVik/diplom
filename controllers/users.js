@@ -5,9 +5,9 @@ const { ErrorNotFound, ErrorAuth } = require('../errors/index');
 const {
   ITEM_NOT_FOUND, SUCCESSFUL_AUTH, AUTH,
 } = require('../configs/constants');
-
-const { JWT_SECRET } = require('../configs/secret');
-
+/*
+const { SECRET_STRING } = require('../configs/secret');
+*/
 const User = require('../models/user');
 
 const createUser = async (req, res, next) => {
@@ -40,8 +40,10 @@ const login = (req, res) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-
+      const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '7d' });
+      /*
+        process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret',
+        */
       res.status(200).cookie('jwt', token, {
         maxAge: 604800000,
         httpOnly: true,
