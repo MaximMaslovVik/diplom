@@ -1,13 +1,13 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { ErrorNotFound, ErrorAuth } = require('../errors/index');
+const { ErrorNotFound, ErrorConfict, ErrorAuth } = require('../errors/index');
 const {
-  ITEM_NOT_FOUND, SUCCESSFUL_AUTH, AUTH,
+  ITEM_NOT_FOUND, SUCCESSFUL_AUTH, AUTH, USER_ALREADY_EXISTS, ERROR_EMAIL_PASS,
 } = require('../configs/constants');
-/*
-const { SECRET_STRING } = require('../configs/secret');
-*/
+
+const { JWT_SECRET } = require('../configs/secret');
+
 const User = require('../models/user');
 
 const createUser = async (req, res, next) => {
@@ -19,8 +19,10 @@ const createUser = async (req, res, next) => {
       password: hash,
       name: name.trim(),
     });
-      res.status(201).send(SUCCESSFUL_AUTH);
-  } catch (next) {}
+    res.status(201).send(SUCCESSFUL_AUTH);
+  } catch (err) {
+    return next(new ErrorConfict(USER_ALREADY_EXISTS));
+  }
 };
 
 
@@ -36,23 +38,27 @@ const getUser = (req, res, next) => {
     .catch(next);
 };
 
-const login = (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '7d' });
-      /*
-        process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret',
-        */
-      res.status(200).cookie('jwt', token, {
-        maxAge: 604800000,
-        httpOnly: true,
-        sameSite: true,
-      })
-        .send(token)
-        .end();
+  try {
+    const user = await User.findOne({ email }).select('+ password');
+    if (!user) {
+      return next(new ErrorAuth(ERROR_EMAIL_PASS));
+    }
+    if (!await User.checkUserRightPassword(password, user.password)) {
+      return next(new ErrorAuth(ERROR_EMAIL_PASS));
+    }
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+    return res.status(200).cookie('jwt', token, {
+      maxAge: 604800000,
+      httpOnly: true,
+      sameSite: true,
     })
-    .catch(new ErrorAuth(AUTH));
+      .send(token)
+      .end();
+  } catch (err) {
+    return next(err);
+  }
 };
 
 module.exports = {

@@ -6,7 +6,7 @@ const celebrateCheck = require('../modules/celebrate-check');
 
 router.get('/articles', getAllArticles);
 
-router.post('/articles', celebrateCheck, validateArticlesPost, createArticle);
+router.post('/articles', validateArticlesPost, createArticle);
 
 router.delete('/articles/:articleId', validateArticlesDel, deleteArticle);
 
