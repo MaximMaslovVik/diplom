@@ -97,3 +97,4 @@ error.log, чтобы хранить информацию об ошибках, �
 Правила написания кода: https://code.s3.yandex.net/web-developer/landings/design-rules/index.html
 
 http://84.201.146.193
+json

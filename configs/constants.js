@@ -12,7 +12,7 @@ module.exports = {
   ARTICLE_NOT_FOUND: 'Статья не найдена',
   UNABLE_TO_CREATE_ARTICLE: 'Не удается создать статью',
   FAILED_CREATE_USER: 'Не удалось создать пользователя',
-  SUCCESSFUL_AUTH: 'Успешная авторизация!',
+  SUCCESSFUL_AUTH: 'Успешная регистрация!',
   RATE_LIMIT: 'Слишком много запросов с одного IP!',
   USER_ALREADY_EXISTS: 'Такой пользователь с таким email уже есть.',
   ARTICLE_DELETED: 'Статья удалена',

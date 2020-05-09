@@ -4,6 +4,7 @@ const { AUTH } = require('../configs/constants');
 const { SECRET_STRING } = require('../configs/secret');
 
 const auth = (req, res, next) => {
+  console.log(req)
   const cookie = req.cookies.jwt;
   if (!cookie) {
     throw new ErrorAuth(AUTH);

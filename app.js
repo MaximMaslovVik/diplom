@@ -10,10 +10,10 @@ const urls = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-
+const cors = require('cors');
 const limiter = require('./modules/rateLimit');
 const errorHandler = require('./middlewares/error-handler');
-
+const { corsChecker } = require('./middlewares/cors');
 const { SERVER_PORT, DEV_DB_HOST } = require('./configs/secret');
 
 mongoose.connect(DEV_DB_HOST, {
@@ -25,7 +25,7 @@ mongoose.connect(DEV_DB_HOST, {
 
 // Модуль helmet поставляет автоматически заголовки безопасности
 app.use(helmet());
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
