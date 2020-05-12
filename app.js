@@ -26,6 +26,7 @@ mongoose.connect(DEV_DB_HOST, {
 // Модуль helmet поставляет автоматически заголовки безопасности
 app.use(helmet());
 app.use(cors());
+app.use(corsChecker);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
