@@ -5,15 +5,14 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 
+const app = express();
+const cors = require('cors');
+const limiter = require('./modules/rateLimit');
 const urls = require('./routes/index');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const app = express();
-const cors = require('cors');
-const limiter = require('./modules/rateLimit');
 const errorHandler = require('./middlewares/error-handler');
-const { corsChecker } = require('./middlewares/cors');
 const { SERVER_PORT, DEV_DB_HOST } = require('./configs/secret');
 
 mongoose.connect(DEV_DB_HOST, {
@@ -25,8 +24,30 @@ mongoose.connect(DEV_DB_HOST, {
 
 // Модуль helmet поставляет автоматически заголовки безопасности
 app.use(helmet());
-app.use(cors());
-app.use(corsChecker);
+
+const allowedCors = [
+  'http://localhost:3000',
+  'http://diplom-max.ml',
+  'http://localhost:8080',
+  'http://localhost:8081',
+];
+
+app.use(cors((req, cb) => {
+  let corsOptions;
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    corsOptions = {
+      origin,
+      credentials: true,
+      allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    };
+  } else {
+    corsOptions = { origin: false };
+  }
+  cb(null, corsOptions);
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

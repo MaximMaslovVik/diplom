@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const { usersEmail } = require('../configs/validate');
 
-const { INVALID_LINK, ERROR_EMAIL_PASS } = require('../configs/constants');
+const { INVALID_LINK } = require('../configs/constants');
 const { ErrorAuth } = require('../errors/index');
 
 const userSchema = new mongoose.Schema({
