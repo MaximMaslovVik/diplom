@@ -44,7 +44,7 @@
     "escape-html": "^1.0.3",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.19.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-rate-limit": "^5.1.1",
     "express-session": "^1.17.0",
     "express-validator": "^6.3.1",
